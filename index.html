@@ -1,1 +1,54 @@
-hello world
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root{
+	--base-size:min(calc(1vw/20),calc(1vh/11));
+	--font-size:calc(var(--base-size)*32);
+}
+
+body{
+	background-image:url('../images/bg.jpg');
+	
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+	width:100vw;
+	height:100vh;
+	top:0px;
+	left:0px;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+.entity{
+	position:absolute;
+	width:calc(var(--base-size)*1920);
+	height:calc(var(--base-size)*1080);
+	font-size:var(--font-size);
+	background-color:white;
+	border-radius:calc(var(--base-size)*32);
+	text-align:center;
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);
+	background-color:rgb(255,255,255,0.5);
+}
+
+
+.blackborder{
+	border:calc(var(--base-size)*4) solid black;
+}
+
+</style>
+<title>知旦暮的博客</title>
+
+</head>
+<body>
+	<div class="entity blackborder">
+		
+		
+		
+	</div>
+</body>
+</html>
