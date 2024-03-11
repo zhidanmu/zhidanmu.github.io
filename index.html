@@ -119,25 +119,5 @@ li{
 		</div>
 		
 	</div>
-	
-	<script>
-		let date=new Date();
-		
-		(()=>{
-			let hour=date.getHours();
-			let bg="images/";
-			if(hour>=6&&hour<12){
-				bg+="bgM.jpg";
-			}else if(hour>=12&&hour<18){
-				bg+="bgA.jpg";
-			}else{
-				bg+="bgN.jpg";
-			}
-			
-			document.body.style.backgroundImage="url("+bg+")";
-		})();
-		
-	
-	</script>
 </body>
 </html>
