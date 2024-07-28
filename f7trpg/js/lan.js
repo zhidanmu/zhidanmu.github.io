@@ -8,7 +8,7 @@ let lan=(()=>{
 			'fail_to_send':'发送失败',
 			'init_info':'当前用户名:{username}<br>下方输入框可双击回车发送消息<br>本网页使用PeerJS框架实现WebRTC',
 			'connection_failed':'连接失败',
-			'peer_id':'本机id为:{id}<br>使用.link [id]可连接其他主机<br>主机会广播消息，请勿互相连接',
+			'peer_id':'本机id为:{id}<br>主机可使用 .link [参与者id] 连接其他参与者<br>主机会广播消息，请勿互相连接',
 			'lost_server_connection':'失去服务器连接',
 			'connect_to':'已与{id}建立连接',
 			'close_connection_to':'与{id}的连接已断开',

@@ -2,11 +2,11 @@ let rtc=(()=>{
 	let conns={};
 	
 	function make_id(){
-		let prefix='f7-';
+		let prefix='f7';
+		let name=user.get('user_name');
+		let suffix=Date.now().toString(36).substr(-4);
 		
-		let suffix=Date.now().toString(36).substr(-6);
-		
-		return (prefix+suffix);
+		return (prefix+'-'+name+'-'+suffix);
 	}
 	
 	function stdout(txt){
@@ -32,7 +32,6 @@ let rtc=(()=>{
 		}
 	}
 	
-	
 	function set_connection(conn,remote_name){
 		conn.on('open',()=>{
 			add_conn(conn);
@@ -45,17 +44,16 @@ let rtc=(()=>{
 			});
 			
 		});
+		
 		conn.on('error',(err)=>{
 				stderr(err);
-			});
+		});
 			
 		conn.on('close',()=>{
-			stdsys(lan['close_connection_to'].replace('{id}',conn.metadata['user_name']));
+			stdsys(lan['close_connection_to'].replace('{id}',remote_name));
 			remove_conn(conn);
 		});
 	}
-	
-	
 	
 	let peer=new Peer(make_id());
 	
@@ -81,7 +79,7 @@ let rtc=(()=>{
 	
 	function connect(id){
 		let conn=peer.connect(id,{metadata:{'user_name':user.get('user_name')}});
-		set_connection(conn,'HOST');
+		set_connection(conn,id);
 		return lan['try_to_connect'].replace('{id}',id);
 	}
 	
