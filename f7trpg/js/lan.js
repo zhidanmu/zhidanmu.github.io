@@ -12,7 +12,9 @@ let lan=(()=>{
 			'lost_server_connection':'失去服务器连接',
 			'connect_to':'已与{id}建立连接',
 			'close_connection_to':'与{id}的连接已断开',
-			'try_to_connect':'尝试与{id}建立连接中...'
+			'try_to_connect':'尝试与{id}建立连接中...',
+			'reconnect':'尝试重连...',
+			'disconnect':'已断开连接'
 		}
 	}
 	

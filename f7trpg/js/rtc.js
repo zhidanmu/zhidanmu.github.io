@@ -1,6 +1,14 @@
 let rtc=(()=>{
 	let conns={};
 	
+	function make_id(){
+		let prefix='f7-';
+		
+		let suffix=Date.now().toString(36).substr(-6);
+		
+		return (prefix+suffix);
+	}
+	
 	function stdout(txt){
 		sys.chat_print(txt);
 	}
@@ -49,7 +57,7 @@ let rtc=(()=>{
 	
 	
 	
-	let peer=new Peer();
+	let peer=new Peer(make_id());
 	
 	peer.on('open',(id)=>{
 		stdsys(lan['peer_id'].replace('{id}',id));	
@@ -64,7 +72,7 @@ let rtc=(()=>{
 	});
 	
 	peer.on('disconnect',()=>{
-		stdout(lan['lost_server_connection']);
+		stderr(lan['lost_server_connection']);
 	});
 	
 	function get_id(){
@@ -79,10 +87,12 @@ let rtc=(()=>{
 	
 	function disconnect(){
 		peer.disconnect();
+		return lan['disconnect'];
 	}
 	
 	function reconnect(){
 		peer.reconnect();
+		return lan['reconnect'];
 	}
 	
 	function destroy(){
