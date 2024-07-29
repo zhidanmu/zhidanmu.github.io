@@ -3,5 +3,6 @@ const color_option={
 	text:'black',
 	err:'red',
 	user:'blue',
-	user_op:'violet'
+	user_op:'violet',
+	rxnum:'grey'
 }

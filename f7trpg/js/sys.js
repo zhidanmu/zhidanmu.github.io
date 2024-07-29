@@ -1,8 +1,8 @@
 
 let sys=(function(){
-	const chat_div=document.getElementById("chat_div");
-	const input_div=document.getElementById("input_div");
-	const menu_div=document.getElementById("menu_div");
+	const chat_div=$("chat_div");
+	const input_div=$("input_div");
+	const menu_div=$("menu_div");
 	
 	let chat_div_focus=0;
 	chat_div.addEventListener("focus",(event)=>{

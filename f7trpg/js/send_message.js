@@ -16,7 +16,8 @@
 						
 						let message_obj={speaker:user.get('user_name'),text:str,text_color:color_option.text,speaker_color:color_option.user,time:(new Date().toLocaleString())}
 						
-						rtc.send(JSON.stringify(message_obj));
+						let num=rtc.send(JSON.stringify(message_obj));
+						message_obj['text']=message_obj['text']+lan['rxnum'].replace('{num}',num).replace('{color}',color_option['rxnum']);
 						sys.chat_print(message_obj);
 						
 					}catch(e){

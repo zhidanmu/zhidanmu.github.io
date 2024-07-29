@@ -60,8 +60,6 @@ let cmd=(()=>{
 			return str;
 		}
 		
-		
-		
 		let ret="";
 		ret+="<span style='color:"+color_option.user_op+";'>";
 		ret+=cmd_res;

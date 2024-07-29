@@ -23,12 +23,15 @@ let rtc=(()=>{
 	}
 	
 	function add_conn(conn){
-		conns[conn.label]=conn;
+		if(conn.open){
+			conns[conn.label]=conn;
+		}
 	}
 	
 	function remove_conn(conn){
 		if(conns[conn.label]){
 			delete conns[conn.label];
+			conn.close();
 		}
 	}
 	
@@ -46,7 +49,8 @@ let rtc=(()=>{
 		});
 		
 		conn.on('error',(err)=>{
-				stderr(err);
+			stderr(err);
+			remove_conn(conn);
 		});
 			
 		conn.on('close',()=>{
@@ -63,10 +67,13 @@ let rtc=(()=>{
 	
 	peer.on('error',(e)=>{
 		stderr(e);
+		for(let i in conns){
+			remove_conn(conns[i]);
+		}
 	});
 	
 	peer.on('connection',(conn)=>{
-		set_connection(conn,conn.metadata['user_name']);
+		set_connection(conn,conn.metadata['offer_user_name']);
 	});
 	
 	peer.on('disconnect',()=>{
@@ -78,7 +85,7 @@ let rtc=(()=>{
 	}
 	
 	function connect(id){
-		let conn=peer.connect(id,{metadata:{'user_name':user.get('user_name')}});
+		let conn=peer.connect(id,{metadata:{'offer_user_name':user.get('user_name')},serialization:'json'});
 		set_connection(conn,id);
 		return lan['try_to_connect'].replace('{id}',id);
 	}
@@ -98,21 +105,27 @@ let rtc=(()=>{
 	}
 	
 	function send(message){
+		let num=0;
 		for(let i in conns){
 			nc=conns[i];
 			if(nc.open){
 				nc.send(message);
+				num++;
 			}
-		}	
+		}
+		return num;
 	}
 	
 	function transmit(conn,message){
+		let num=0;
 		for(let i in conns){
 			let nc=conns[i];
 			if(nc.label!=conn.label&&nc.open){
 				nc.send(message);
+				num++;
 			}
 		}
+		return num;
 	}
 	
 	return {
@@ -123,6 +136,5 @@ let rtc=(()=>{
 		destroy:destroy,
 		send:send,
 		transmit:transmit
-		
 	}
 })();

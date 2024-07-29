@@ -13,8 +13,9 @@ let lan=(()=>{
 			'connect_to':'已与{id}建立连接',
 			'close_connection_to':'与{id}的连接已断开',
 			'try_to_connect':'尝试与{id}建立连接中...',
-			'reconnect':'尝试重连...',
-			'disconnect':'已断开连接'
+			'reconnect':'尝试重连服务器...',
+			'disconnect':'已断开与服务器的连接',
+			'rxnum':'<span style="color:{color};">@ {num} Rx</span>'
 		}
 	}
 	
