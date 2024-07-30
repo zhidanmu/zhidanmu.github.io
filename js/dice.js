@@ -21,15 +21,38 @@ let dice=(()=>{
 		let total=0;
 		let str="";
 		str+='(';
-		
+		let simple_mode=false;
+		let dsets={};
+		if(num>10){
+			simple_mode=true;
+		}
 		
 		for(let i=0;i<num;i++){
 			let res=roll_a_die(dice_type);
 			total+=res.total;
-			if(i!=0)str+='+';
-			str+=res.str;
+			if(!simple_mode){
+				str+=res.str;
+				str+='+';
+			}else{
+				if(dsets[res.total]){
+					dsets[res.total]++;
+				}else{
+					dsets[res.total]=1;
+				}
+			}
 		}
 		
+		if(simple_mode){
+			for(let i in dsets){
+				str+=i.toString();
+				str+='*';
+				str+=dsets[i].toString();
+				str+='+';
+			}
+		}
+		
+		str=str.substr(0,str.length - 1);
+	
 		str+=')';
 		
 		return {
@@ -94,8 +117,11 @@ let dice=(()=>{
 		}
 		
 		str+=dexpr;
-		str+='=';
-		str+=mexpr;
+		
+		if(mexpr.length<400){
+			str+='=';
+			str+=mexpr;
+		}
 		
 		total=evalF(mexpr);
 		str+='='

@@ -1,5 +1,4 @@
 let rtc=(()=>{
-	let conns={};
 	
 	function make_id(){
 		let prefix='f7';
@@ -22,28 +21,52 @@ let rtc=(()=>{
 		sys.chat_sys_info(txt);
 	}
 	
+	
+	let peer=null;
+	
+	let conns={};
+	
 	function add_conn(conn){
-		if(conn.open){
-			conns[conn.label]=conn;
-		}
+		if(conn)conns[conn.label]=conn;
 	}
 	
 	function remove_conn(conn){
-		if(conns[conn.label]){
+		if(conn){
+			console.log(conn.peer+' lost signal');
 			delete conns[conn.label];
 			conn.close();
 		}
 	}
 	
+	window.addEventListener('beforeunload',(event)=>{
+		if(peer){
+			peer.destroy();
+		}
+	});
+	
 	function set_connection(conn,remote_name){
+		if(!conn)return;
+		
 		conn.on('open',()=>{
 			add_conn(conn);
 			stdsys(lan['connect_to'].replace('{id}',remote_name));
 			
 			conn.on('data',(data)=>{
-				let txt=JSON.parse(data);
-				stdout(txt);
-				transmit(conn,data);
+				//console.log(data);
+				if(!data['type']){
+					return;
+				}
+				
+				if(data['type']=='text'){
+					stdout(data);
+					if(!data['transmit']){	
+						data['transmit']=true;
+						transmit(conn,data);
+					}
+					return;
+				}
+				
+				
 			});
 			
 		});
@@ -58,8 +81,6 @@ let rtc=(()=>{
 			remove_conn(conn);
 		});
 	}
-	
-	let peer=null;
 	
 	function peer_init(id){
 		if(!id||id==''){
@@ -120,6 +141,7 @@ let rtc=(()=>{
 	
 	function send(message){
 		let num=0;
+		message['type']='text';
 		for(let i in conns){
 			nc=conns[i];
 			if(nc.open){
