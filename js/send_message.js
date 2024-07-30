@@ -6,13 +6,13 @@
 			let timestamp=Date.now();
 			if(timestamp-enter_timestamp<500){
 				let content=input_div.innerHTML;
+				content=content.replaceAll('&nbsp;',' ');
 				content=content.replaceAll('<div>','<br>');
 				content=content.replaceAll('</div>','');
 				content=content.replaceAll('<br>','\n');
-				content=content.trim();
 				if(content!=""){
 					try{
-						let str=cmd.handle(content);
+						let str=cmd.handle(content.trim());
 						
 						let message_obj={speaker:user.get('user_name'),text:str,text_color:color_option.text,speaker_color:color_option.user,time:(new Date().toLocaleString())}
 						

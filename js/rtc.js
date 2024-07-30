@@ -59,32 +59,46 @@ let rtc=(()=>{
 		});
 	}
 	
-	let peer=new Peer(make_id());
+	let peer=null;
 	
-	peer.on('open',(id)=>{
-		stdsys(lan['peer_id'].replace('{id}',id));	
-	});
-	
-	peer.on('error',(e)=>{
-		stderr(e);
-		for(let i in conns){
-			remove_conn(conns[i]);
+	function peer_init(id){
+		if(!id||id==''){
+			id=make_id();
+			peer=new Peer(id);
+		}else{
+			peer=new Peer(id);
 		}
-	});
-	
-	peer.on('connection',(conn)=>{
-		set_connection(conn,conn.metadata['offer_user_name']);
-	});
-	
-	peer.on('disconnect',()=>{
-		stderr(lan['lost_server_connection']);
-	});
+		
+		peer.on('open',(id)=>{
+			stdsys(lan['peer_id'].replace('{id}',id));	
+		});
+		
+		peer.on('error',(e)=>{
+			stderr(e);
+			for(let i in conns){
+				remove_conn(conns[i]);
+			}
+		});
+		
+		peer.on('connection',(conn)=>{
+			set_connection(conn,conn.metadata['offer_user_name']);
+		});
+		
+		peer.on('disconnect',()=>{
+			stderr(lan['lost_server_connection']);
+		});
+		
+		return lan['try_use_peer_id'].replace('{id}',id);
+	}
 	
 	function get_id(){
 		return peer.id;
 	}
 	
 	function connect(id){
+		if(!peer){
+			return lan['peer'];
+		}
 		let conn=peer.connect(id,{metadata:{'offer_user_name':user.get('user_name')},serialization:'json'});
 		set_connection(conn,id);
 		return lan['try_to_connect'].replace('{id}',id);
@@ -129,6 +143,7 @@ let rtc=(()=>{
 	}
 	
 	return {
+		peer_init:peer_init,
 		get_id:get_id,
 		disconnect:disconnect,
 		reconnect:reconnect,

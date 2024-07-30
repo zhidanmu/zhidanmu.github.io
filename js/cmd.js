@@ -30,6 +30,11 @@ let cmd=(()=>{
 		return ret;
 	}
 	
+	function _peer(id){
+		let ret=rtc.peer_init(id);
+		return ret;
+	}
+	
 	function _disconnect(){
 		return rtc.disconnect();
 	}
@@ -46,6 +51,8 @@ let cmd=(()=>{
 		
 		if(match_cmd(str,'.nn')){
 			cmd_res=_nn(str.substr(3).trim());
+		}else if(match_cmd(str,'.peer')){
+			cmd_res=_peer(str.substr(5).trim());
 		}else if(match_cmd(str,'.link')){
 			let r=_link(str.substr(5).trim());
 			cmd_res=r;

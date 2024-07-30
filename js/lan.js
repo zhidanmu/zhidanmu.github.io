@@ -15,7 +15,9 @@ let lan=(()=>{
 			'try_to_connect':'尝试与{id}建立连接中...',
 			'reconnect':'尝试重连服务器...',
 			'disconnect':'已断开与服务器的连接',
-			'rxnum':'<span style="color:{color};">@ {num} Rx</span>'
+			'peer':'请先使用 .peer [想使用的id] 来申请连接id',
+			'try_use_peer_id':'尝试申请{id}中...',
+			'rxnum':'<span style="color:{color};"> @{num}</span>'
 		}
 	}
 	
