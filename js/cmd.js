@@ -1,5 +1,18 @@
 let cmd=(()=>{
 	
+	function stdout(txt){
+		sys.chat_print(txt);
+	}
+	
+	function stderr(err){
+		sys.chat_sys_err(err.toString());
+		console.log(err);
+	}
+	
+	function stdsys(txt){
+		sys.chat_sys_info(txt);
+	}
+	
 	function match_cmd(str,cmd){
 		if(str.substr(0,cmd.length)==cmd){
 			return true;
@@ -43,38 +56,142 @@ let cmd=(()=>{
 		return rtc.reconnect();
 	}
 	
+	function _help(arg){
+		if(arg){
+			for(let k in handers){
+				let h_=handers[k];
+				for(let i=0;i<h_.length;i++){
+					if(h_[i].cmd==arg||h_[i].cmd.substr(1)==arg){
+						stdsys(lan['description'].replace('{cmd}',h_[i].cmd).replace('{description}',h_[i].description));
+						return lan['help'];
+					}
+				}
+			}
+			stdsys(lan['no_cmd']);
+			return lan['help'];
+		}
+		
+		let ret='';
+		for(let k in handers){
+			let h_=handers[k];
+			for(let i=0;i<h_.length;i++){
+				ret+=(lan['description'].replace('{cmd}',h_[i].cmd).replace('{description}',h_[i].description));
+				ret+='<br>';
+			}
+		}
+		stdsys(ret);
+		return lan['help'];
+	}
+	
+	
+	let handers={
+		common:[
+		{
+			cmd:'.nn',//cmd
+			func:(arg)=>{
+				return _nn(arg);
+			},//handle function
+			description:lan.cmd_description['.nn']//description of .help
+		},
+		{
+			cmd:'.peer',
+			func:(arg)=>{
+				return _peer(arg);
+			},
+			description:lan.cmd_description['.peer']
+		},
+		{
+			cmd:'.link',
+			func:(arg)=>{
+				return _link(arg);
+			},
+			description:lan.cmd_description['.link']
+		},
+		{
+			cmd:'.disconnect',
+			func:(arg)=>{
+				return _disconnect();
+			},
+			description:lan.cmd_description['.disconnect']
+		},
+		{
+			cmd:'.reconnect',
+			func:(arg)=>{
+				return _reconnect();
+			},
+			description:lan.cmd_description['.reconnect']
+		},
+		{
+			cmd:'.r',
+			func:(arg)=>{
+				let ret=_r(arg);
+				return ret.str;
+			},
+			description:lan.cmd_description['.r']
+		},
+		{
+			cmd:'.help',
+			func:(arg)=>{
+				let ret=_help(arg);
+				return ret;
+			},
+			description:lan.cmd_description['.help'],
+			not_send:true//do not send results to other peers
+		}
+	]};
+	
+	function get_all_handlers(){
+		return handers;
+	}
+	
+	function set_handlers(k,v){
+		handers[k]=v;
+	}
+	
+	function remove_handlers(k){
+		delete handers[k];
+	}
+	
 	function handle(str){
+		let ret={str:'',not_send:false};
 		if(str.length<=0||str[0]!='.'){
-			return str;
+			ret.str=str;
+			return ret;
 		}
 		let cmd_res="";
-		
-		if(match_cmd(str,'.nn')){
-			cmd_res=_nn(str.substr(3).trim());
-		}else if(match_cmd(str,'.peer')){
-			cmd_res=_peer(str.substr(5).trim());
-		}else if(match_cmd(str,'.link')){
-			let r=_link(str.substr(5).trim());
-			cmd_res=r;
-		}else if(match_cmd(str,'.disconnect')){
-			cmd_res=_disconnect();
-		}else if(match_cmd(str,'.reconnect')){
-			cmd_res=_reconnect();
-		}else if(match_cmd(str,'.r')){
-			let dres=_r(str.substr(2).trim());
-			cmd_res=dres.str;
-		}else{
-			return str;
+		let parsed=false;
+		for(let k in handers){
+			let handers_=handers[k];
+			for(let i=0;i<handers_.length;i++){
+				let hldr=handers_[i];
+				if(match_cmd(str,hldr.cmd)){
+					cmd_res=hldr.func(str.substr(hldr.cmd.length).trim());
+					parsed=true;
+					if(hldr.not_send){
+						ret.not_send=true;
+					}
+					break;
+				}
+			}
+			if(parsed){
+				break;
+			}
+		}
+		if(!parsed){
+			ret.str=str;
+			return ret;
 		}
 		
-		let ret="";
-		ret+="<span style='color:"+color_option.user_op+";'>";
-		ret+=cmd_res;
-		ret+="</span>";
+		ret.str+="<span style='color:"+color_option.user_op+";'>";
+		ret.str+=cmd_res;
+		ret.str+="</span>";
 		return ret;
 	}
 	
 	return {
-		handle:handle
+		handle:handle,
+		get_all_handlers:get_all_handlers,
+		set_handlers:set_handlers,
+		remove_handlers:remove_handlers
 	}
 })();

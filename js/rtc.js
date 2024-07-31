@@ -126,13 +126,19 @@ let rtc=(()=>{
 	}
 	
 	function disconnect(){
-		peer.disconnect();
-		return lan['disconnect'];
+		if(peer){
+			peer.disconnect();
+			return lan['disconnect'];
+		}
+		return lan['peer'];
 	}
 	
 	function reconnect(){
-		peer.reconnect();
-		return lan['reconnect'];
+		if(peer){
+			peer.reconnect();
+			return lan['reconnect'];
+		}
+		return lan['peer'];
 	}
 	
 	function destroy(){
