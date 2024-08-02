@@ -1,7 +1,15 @@
 let dice=(()=>{
 	
 	let default_dice_type=6;
-	let default_dice_num=2;
+	let default_dice_num=1;
+	
+	function set_default_dice_type(type){
+		default_dice_type=type;
+	}
+	
+	function set_default_dice_num(num){
+		default_dice_num=num;
+	}
 	
 	function getRandomInt(min, max) {
 	  return Math.floor(Math.random() * (max - min + 1 ) + min); 
@@ -87,6 +95,35 @@ let dice=(()=>{
 		return ret;
 	}
 	
+	function evalMultiDiceExpr(expr){
+		let multiDiceExprReg=/((\d)+#)?(((\d)*d(\d)*)|(\d)*)((\+|-|\*|\/)((((\d)*d(\d)*)|(\d)*)))*/g;
+		let dexpr=expr.match(multiDiceExprReg);
+		if(!dexpr||dexpr.length<=0||!dexpr[0]){
+			throw new Error(lan['cmd_error']);
+		}
+		dexpr=dexpr[0];
+		let suffix=expr.replace(dexpr,'');
+		let times=expr.match(/((\d)+#)/);
+		if(times&&times.length>0){
+			times=times[1];
+			dexpr=dexpr.replace(times,'').trim();
+			times=Number(times.substr(0,times.length-1));
+			let str='';
+			let total=[];
+			for(let i=0;i<times;i++){
+				let sexpr=evalDiceExpr(dexpr);
+				str+=sexpr.str;
+				str+='<br>';
+				total.push(sexpr.total);
+			}
+			return {
+				str:str,
+				suffix:suffix,
+				total:total
+			}
+		}
+		return evalDiceExpr(dexpr);
+	}
 	
 	function evalDiceExpr(expr){
 		
@@ -138,7 +175,9 @@ let dice=(()=>{
 		roll_a_die:roll_a_die,
 		roll_dice:roll_dice,
 		evalDiceExpr:evalDiceExpr,
-		evalF:evalF
-		
+		evalMultiDiceExpr:evalMultiDiceExpr,
+		evalF:evalF,
+		set_default_dice_num:set_default_dice_num,
+		set_default_dice_type:set_default_dice_type
 	}
 })();

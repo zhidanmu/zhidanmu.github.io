@@ -1,0 +1,39 @@
+.opa{
+	opacity:0.6;
+	background-color:white;
+}
+
+
+.opa:focus{
+	opacity:1;
+	background-color:white;
+}
+
+
+.opa:focus-within{
+	opacity:1;
+	background-color:white;
+}
+
+
+.input{
+	text-align:center;
+	outline:none;
+	width:4rem;
+	border-bottom:0;
+	border-left:0;
+	border-right:0;
+	border-top:0;
+	display:table-cell;
+	font-size:1rem;
+	height:line-height;
+	text-decoration: underline;
+}
+
+.attr_label{
+	display:inline-block;
+}
+
+ .status{
+    display:flex;
+}

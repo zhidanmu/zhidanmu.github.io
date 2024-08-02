@@ -29,7 +29,7 @@ let cmd=(()=>{
 	}
 	
 	function _r(dexpr){
-		let ret=dice.evalDiceExpr(dexpr);
+		let ret=dice.evalMultiDiceExpr(dexpr);
 		return ret;
 	}
 	
@@ -74,6 +74,7 @@ let cmd=(()=>{
 		let ret='';
 		for(let k in handers){
 			let h_=handers[k];
+			ret+="----"+k+"----<br>";
 			for(let i=0;i<h_.length;i++){
 				ret+=(lan['description'].replace('{cmd}',h_[i].cmd).replace('{description}',h_[i].description));
 				ret+='<br>';
@@ -86,6 +87,15 @@ let cmd=(()=>{
 	
 	let handers={
 		common:[
+		{
+			cmd:'.help',
+			func:(arg)=>{
+				let ret=_help(arg);
+				return ret;
+			},
+			description:lan.cmd_description['.help'],
+			not_send:true//do not send results to other peers
+		},
 		{
 			cmd:'.nn',//cmd
 			func:(arg)=>{
@@ -128,15 +138,6 @@ let cmd=(()=>{
 				return ret.str;
 			},
 			description:lan.cmd_description['.r']
-		},
-		{
-			cmd:'.help',
-			func:(arg)=>{
-				let ret=_help(arg);
-				return ret;
-			},
-			description:lan.cmd_description['.help'],
-			not_send:true//do not send results to other peers
 		}
 	]};
 	
