@@ -323,8 +323,8 @@ let f7trpg=(()=>{
 			'2':'{A/5}',
 			'3':'{A/2}',
 			'4':'{A/2}',
-			'5':'{ATK}-{A/5}',
-			'6':'{ATK}-{A/5}',
+			'5':'max({ATK}-{A/5},1)',
+			'6':'max({ATK}-{A/5},1)',
 			'7':'{ATK}',
 			'8':'{ATK}+{A/5}',
 			'9':'{ATK}+{A/5}',
@@ -342,7 +342,7 @@ let f7trpg=(()=>{
 		str+=cal_expr_str.replace('{coe}',coe).replace('{rdexpr}',atk_table[dp]);
 		str+='=';
 		str+=cal_expr;
-		let total=dice.evalF(cal_expr);
+		let total=dice.evalF(cal_expr.replaceAll('max','Math.max').replaceAll('min','Math.min'));
 		str+='=';
 		str+=total.toString();
 		return {
@@ -379,8 +379,8 @@ let f7trpg=(()=>{
 			'2':'{H/5}',
 			'3':'{H/2}',
 			'4':'{H/2}',
-			'5':'{HLA}-{H/5}',
-			'6':'{HLA}-{H/5}',
+			'5':'max({HLA}-{H/5},1)',
+			'6':'max({HLA}-{H/5},1)',
 			'7':'{HLA}',
 			'8':'{HLA}+{H/5}',
 			'9':'{HLA}+{H/5}',
@@ -398,7 +398,7 @@ let f7trpg=(()=>{
 		str+=cal_expr_str.replace('{coe}',coe).replace('{rdexpr}',atk_table[dp]);
 		str+='=';
 		str+=cal_expr;
-		let total=dice.evalF(cal_expr);
+		let total=dice.evalF(cal_expr.replaceAll('max','Math.max').replaceAll('min','Math.min'));
 		str+='=';
 		str+=total.toString();
 		return {
