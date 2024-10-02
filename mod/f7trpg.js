@@ -167,8 +167,8 @@ let f7trpg=(()=>{
 					}
 					
 					let hp=20+10*Number(character_status[career_data['HP']]);
-					let atk=Number(character_status[career_data['ATK']]);
-					let hla=Number(character_status[career_data['HLA']]);
+					let atk=Math.max(1,Number(character_status[career_data['ATK']]));
+					let hla=Math.max(1,Number(character_status[career_data['HLA']]));
 					let dex=Number(character_status[career_data['DEX']]);
 					let hd=7+Number(character_status[career_data['HD']]);
 					
@@ -322,13 +322,13 @@ let f7trpg=(()=>{
 		const atk_table={
 			'2':'{A/5}',
 			'3':'{A/2}',
-			'4':'{A/2}',
+			'4':'max({ATK}-{A/5},1)',
 			'5':'max({ATK}-{A/5},1)',
-			'6':'max({ATK}-{A/5},1)',
+			'6':'{ATK}',
 			'7':'{ATK}',
-			'8':'{ATK}+{A/5}',
+			'8':'{ATK}',
 			'9':'{ATK}+{A/5}',
-			'10':'{ATK}+{A/2}',
+			'10':'{ATK}+{A/5}',
 			'11':'{ATK}+{A/2}',
 			'12':'{ATK}+{A/2}+{A/5}'
 		}
@@ -378,13 +378,13 @@ let f7trpg=(()=>{
 		const atk_table={
 			'2':'{H/5}',
 			'3':'{H/2}',
-			'4':'{H/2}',
+			'4':'max({HLA}-{H/5},1)',
 			'5':'max({HLA}-{H/5},1)',
-			'6':'max({HLA}-{H/5},1)',
+			'6':'{HLA}',
 			'7':'{HLA}',
-			'8':'{HLA}+{H/5}',
+			'8':'{HLA}',
 			'9':'{HLA}+{H/5}',
-			'10':'{HLA}+{H/2}',
+			'10':'{HLA}+{H/5}',
 			'11':'{HLA}+{H/2}',
 			'12':'{HLA}+{H/2}+{H/5}'
 		}
